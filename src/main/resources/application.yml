@@ -1,0 +1,30 @@
+server:
+  port: 9090
+  servlet:
+    contextPath: /api
+spring:
+  application:
+    name: afinity-main
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dbafinity
+    username: postgres
+    password: Zs9tX2TcHwlZGO0
+    driver: org.postgresql.Driver
+    poolName: ${spring.application.name}-poolg
+    maximumPoolSize: 20
+    minimumIdle: 2
+    properties:
+      cachePrepStmts: true
+      prepStmtCacheSize: 256
+      prepStmtCacheSqlLimit: 2048
+      useServerPrepStmts: true
+  jpa:
+    properties:
+      hibernate:
+        default_schema:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+        temp:
+          use_jdbc_metadata_defaults: false
+        show_sql: true
+
