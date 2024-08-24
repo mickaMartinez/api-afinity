@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ms.afinity.bean.AlumnoBusquedaAvanzada;
 import com.ms.afinity.bean.AlumnosBean;
 import com.ms.afinity.bean.ConsultaAlumnosBean;
 import com.ms.afinity.bean.ListaAlumnoBean;
@@ -132,6 +133,30 @@ public class AlumnosServices implements IAlumnosServices {
         }
 
         return response;
+    }
+
+    @Override
+    @Transactional
+    public List<ListaAlumnoBean> traerAlumnoBusquedaAvanzada(AlumnoBusquedaAvanzada busqueda) {
+        List<AlumnosEntity> alumnos = alumnosRepository.findAlumnos(busqueda.getNombre(), busqueda.getCorreo(),
+                busqueda.getEstatus());
+
+        List<ListaAlumnoBean> listaFinal = new ArrayList<>();
+        for (AlumnosEntity it : alumnos) {
+            ListaAlumnoBean lista = new ListaAlumnoBean();
+
+            lista.setIdAlumno(it.getIdAlumnos());
+            lista.setNombre(it.getNombre());
+            lista.setApellidoPaterno(it.getApellidoPaterno());
+            lista.setApellidoMaterno(it.getApellidoMaterno());
+            lista.setCorreo(it.getCorreo());
+            lista.setTelefono(it.getTelefono());
+            lista.setEstatus(it.getEstatus());
+
+            listaFinal.add(lista);
+        }
+
+        return listaFinal;
     }
 
 }

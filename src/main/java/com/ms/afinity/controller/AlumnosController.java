@@ -1,13 +1,18 @@
 package com.ms.afinity.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.afinity.bean.AlumnoBusquedaAvanzada;
 import com.ms.afinity.bean.AlumnosBean;
 import com.ms.afinity.bean.ConsultaAlumnosBean;
+import com.ms.afinity.bean.ListaAlumnoBean;
+import com.ms.afinity.bean.ListaInscripcionesBean;
 import com.ms.afinity.config.ResponseService;
 import com.ms.afinity.services.IAlumnosServices;
 import com.ms.afinity.services.impl.AlumnosServices;
@@ -75,6 +80,20 @@ public class AlumnosController {
     public ResponseEntity<ResponseService<Boolean>> eliminarAlumno(@PathVariable Long idAlumno) {
         final ResponseService<Boolean> response = new ResponseService<>();
         Boolean dataResponse = this.alumnosServices.eliminarAlumno(idAlumno);
+
+        try {
+            return response.getResponse(dataResponse, ResponseService.MSGCORRECTO);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return response.getResponseError(ResponseService.MSGERROR);
+        }
+    }
+
+    @PostMapping("/avanzada")
+    public ResponseEntity<ResponseService<List<ListaAlumnoBean>>> traerAlumnoBusquedaAvanzada(
+            @RequestBody AlumnoBusquedaAvanzada alumnoBusquedaAvanzada) {
+        final ResponseService<List<ListaAlumnoBean>> response = new ResponseService<>();
+        List<ListaAlumnoBean> dataResponse = this.alumnosServices.traerAlumnoBusquedaAvanzada(alumnoBusquedaAvanzada);
 
         try {
             return response.getResponse(dataResponse, ResponseService.MSGCORRECTO);
