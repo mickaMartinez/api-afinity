@@ -23,14 +23,15 @@ public class HistorialServices implements IHistorialServices {
         this.historialRepository = historialRepository;
     }
 
-    public void guardarHistorial(Integer idAccion, Long idAlumno, Integer idCurso, Date fecha) {
+    public void guardarHistorial(Integer idAccion, Long idAlumno, Integer idCurso, Long inscripcion) {
         AccionEntity accionEntity = entityManager.find(AccionEntity.class, idAccion);
 
         HistorialEntity historialEntity = new HistorialEntity();
 
         historialEntity.setAccion(accionEntity);
-        historialEntity.setIdAlumnos(idAlumno);
-        historialEntity.setIdCursos(idCurso);
+        historialEntity.setIdAlumno(idAlumno);
+        historialEntity.setIdCurso(idCurso);
+        historialEntity.setIdInscripcion(inscripcion);
         historialEntity.setFecha(new Date());
 
         historialRepository.save(historialEntity);

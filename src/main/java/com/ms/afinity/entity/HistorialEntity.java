@@ -22,17 +22,20 @@ public class HistorialEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_historial")
-    private Integer idHistorial;
+    private Long idHistorial;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_accion", referencedColumnName = "id_accion")
     private AccionEntity accion;
 
-    @Column(name = "id_alumnos")
-    private Long idAlumnos;
+    @Column(name = "id_alumno")
+    private Long idAlumno;
 
-    @Column(name = "id_cursos")
-    private Integer idCursos;
+    @Column(name = "id_curso")
+    private Integer idCurso;
+
+    @Column(name = "id_inscripcion")
+    private Long idInscripcion;
 
     @Column(name = "fecha")
     private Date fecha;

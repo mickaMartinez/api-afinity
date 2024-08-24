@@ -25,12 +25,16 @@ public class InscripcionesServices implements IInscripcionesServices {
     private InscripcionesRepository inscripcionesRepository;
     private CursosRepository cursosRepository;
 
+    private HistorialServices historialServices;
+
     @PersistenceContext(unitName = "afinity-repo")
     private EntityManager entityManager;
 
-    public InscripcionesServices(InscripcionesRepository inscripcionesRepository, CursosRepository cursosRepository) {
+    public InscripcionesServices(InscripcionesRepository inscripcionesRepository, CursosRepository cursosRepository,
+            HistorialServices historialServices) {
         this.inscripcionesRepository = inscripcionesRepository;
         this.cursosRepository = cursosRepository;
+        this.historialServices = historialServices;
     }
 
     @Override
@@ -82,7 +86,10 @@ public class InscripcionesServices implements IInscripcionesServices {
             inscripcionesEntity.setCursos(entityManager.find(CursosEntity.class, cursos));
             inscripcionesEntity.setEstatus(true);
 
-            inscripcionesRepository.save(inscripcionesEntity);
+            InscripcionesEntity nuevaMateria = inscripcionesRepository.save(inscripcionesEntity);
+
+            historialServices.guardarHistorial(7, inscripcionBean.getIdAlumno(), cursos,
+                    nuevaMateria.getIdInscripciones());
         }
 
         return true;
@@ -99,6 +106,9 @@ public class InscripcionesServices implements IInscripcionesServices {
             inscripcionesRepository.save(inscripcionExistente.get());
 
             response = Boolean.TRUE;
+
+            historialServices.guardarHistorial(8, null, null,
+                    idInscripcion);
         }
 
         return response;

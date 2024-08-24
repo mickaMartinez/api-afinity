@@ -25,9 +25,13 @@ public class AlumnosServices implements IAlumnosServices {
     private AlumnosRepository alumnosRepository;
     private InscripcionesRepository inscripcionesRepository;
 
-    public AlumnosServices(AlumnosRepository alumnosRepository, InscripcionesRepository inscripcionesRepository) {
+    private HistorialServices historialServices;
+
+    public AlumnosServices(AlumnosRepository alumnosRepository, InscripcionesRepository inscripcionesRepository,
+            HistorialServices historialServices) {
         this.alumnosRepository = alumnosRepository;
         this.inscripcionesRepository = inscripcionesRepository;
+        this.historialServices = historialServices;
     }
 
     @Override
@@ -70,7 +74,9 @@ public class AlumnosServices implements IAlumnosServices {
         alumnosEntity.setTelefono(alumnosBean.getTelefono());
         alumnosEntity.setEstatus(alumnosBean.getEstatus());
 
-        alumnosRepository.save(alumnosEntity);
+        AlumnosEntity nuevoAlumno = alumnosRepository.save(alumnosEntity);
+
+        historialServices.guardarHistorial(4, nuevoAlumno.getIdAlumnos(), null, null);
 
         return true;
     }
@@ -95,6 +101,8 @@ public class AlumnosServices implements IAlumnosServices {
 
             alumnosRepository.save(alumno);
             response = Boolean.TRUE;
+
+            historialServices.guardarHistorial(6, idAlumno, null, null);
         }
 
         return response;
@@ -119,6 +127,8 @@ public class AlumnosServices implements IAlumnosServices {
             alumnosRepository.save(alumnoExistente.get());
 
             response = Boolean.TRUE;
+
+            historialServices.guardarHistorial(3, idAlumno, null, null);
         }
 
         return response;

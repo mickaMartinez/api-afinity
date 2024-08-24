@@ -25,9 +25,13 @@ public class CursosServices implements ICursosServices {
     private CursosRepository cursosRepository;
     private InscripcionesRepository inscripcionesRepository;
 
-    public CursosServices(CursosRepository cursosRepository, InscripcionesRepository inscripcionesRepository) {
+    private HistorialServices historialServices;
+
+    public CursosServices(CursosRepository cursosRepository, InscripcionesRepository inscripcionesRepository,
+            HistorialServices historialServices) {
         this.cursosRepository = cursosRepository;
         this.inscripcionesRepository = inscripcionesRepository;
+        this.historialServices = historialServices;
     }
 
     @Override
@@ -62,7 +66,9 @@ public class CursosServices implements ICursosServices {
         cursosEntity.setNombre(cursosBean.getNombre().toLowerCase().toUpperCase().trim());
         cursosEntity.setEstatus(cursosBean.getEstatus());
 
-        cursosRepository.save(cursosEntity);
+        CursosEntity nuevoCurso = cursosRepository.save(cursosEntity);
+
+        historialServices.guardarHistorial(2, null, nuevoCurso.getIdCursos(), null);
 
         return true;
     }
@@ -81,6 +87,8 @@ public class CursosServices implements ICursosServices {
             cursosRepository.save(curso);
 
             response = Boolean.TRUE;
+
+            historialServices.guardarHistorial(5, null, idCurso, null);
         }
 
         return response;
@@ -105,6 +113,8 @@ public class CursosServices implements ICursosServices {
             cursosRepository.save(cursoExistente.get());
 
             response = Boolean.TRUE;
+
+            historialServices.guardarHistorial(1, null, idCurso, null);
         }
 
         return response;
